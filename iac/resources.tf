@@ -32,6 +32,15 @@ resource "aws_security_group" "allow_ssh" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  # Allow ephemeral ports for MPI connections
+  # Note that this is a potential security risk for PROD systems, and should be locked down to specific IP ranges
+  ingress {
+    from_port   = 1024
+    to_port     = 65535
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   egress {
     from_port   = 0
     to_port     = 0
@@ -71,14 +80,13 @@ resource "null_resource" "ansible_provision" {
       ANSIBLE_HOST_KEY_CHECKING = "False"
     }
 
+    # Note this "join"-approach will likely fail for many instances (too long cmd line), then write to an inventory file first
     command = <<EOT
       ansible-playbook -i '${join(",", aws_instance.node[*].public_ip)},' -u ec2-user --private-key ${var.private_key} playbook.yml
     EOT
   }
 
-  depends_on = [
-    aws_instance.node
-  ]
+  depends_on = [aws_instance.node]
 }
 
 

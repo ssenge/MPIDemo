@@ -24,7 +24,7 @@ const EXP_TO_RANK = zip(EXPS, 1:length(EXPS)) |> Dict
 
 const RANK_TO_EXP = zip(1:length(EXPS), EXPS) |> Dict
 
-const logger = TeeLogger(global_logger(), FileLogger("log/Mersenne_$(Dates.format(Dates.now(), "yyyy-mm-dd_HH_MM_SS")).log", always_flush = true, append = true))
+const logger = TeeLogger(global_logger(), FileLogger("logs/Mersenne_$(Dates.format(Dates.now(), "yyyy-mm-dd_HH_MM_SS")).log", always_flush = true, append = true))
 
 function found_str(p, job, job_duration, total_duration, worker)
 	shorten = (n, max_len, lead, trail) -> begin
