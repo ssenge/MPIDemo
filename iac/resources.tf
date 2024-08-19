@@ -60,6 +60,12 @@ resource "aws_instance" "node" {
   key_name               = aws_key_pair.ssh_key.key_name
   vpc_security_group_ids = [aws_security_group.allow_ssh.id]
 
+  user_data = <<-EOF
+            #!/bin/bash
+            echo "${base64encode(file(var.private_key))}" | base64 -d > /home/ec2-user/.ssh/id_rsa
+            chmod 400 /home/ec2-user/.ssh/id_rsa
+            EOF
+
   connection {
     type        = "ssh"
     user        = var.user

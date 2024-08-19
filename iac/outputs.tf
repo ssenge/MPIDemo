@@ -9,7 +9,7 @@ output "instance_public_ip" {
 }
 
 output "instance_cpu_count" {
-  description = "No. of CPUs"
-  value       = aws_instance.node[*].cpu_core_count
+  description = "No. of vCPUs"
+  value       = aws_instance.node[*].vcpus
 }
 

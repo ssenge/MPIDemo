@@ -51,19 +51,13 @@
       
     - name: Install Julia project dependencies
       ansible.builtin.shell: |
-        julia --project -e 'using Pkg; Pkg.instantiate()'  >> /home/ec2-user/MPIDemo/julia-deps-output-inst.log
-        julia --project -e 'using MPI; MPI.install_mpiexecjl()' >> /home/ec2-user/MPIDemo/julia-deps-output-mpi.log
-    #    touch iwashere.txt
+        julia --project -e 'using Pkg; Pkg.instantiate()'
+        julia --project -e 'using MPI; MPI.install_mpiexecjl()'
       args:
         chdir: /home/ec2-user/MPIDemo
       register: output
       failed_when: "'ERROR' in output.stderr"
       become: false
-
-    #- name: Save the command output to a file on the remote host
-    #  ansible.builtin.copy:
-    #    content: "{{ output.stdout }}"
-    #   dest: /home/ec2-user/MPIDemo/julia-deps-output.log
     
     - name: Create log dir
       file:
@@ -72,3 +66,18 @@
         owner: ec2-user
         group: ec2-user
         mode: '0755'
+
+    - name: Create log dir
+      file:
+        path: /home/ec2-user/MPIDemo/conf
+        state: directory
+        owner: ec2-user
+        group: ec2-user
+        mode: '0755'
+
+
+    - name: Set up MPICH to use the correct user
+      command: echo $MPICH_SSH
+      environment:
+        MPICH_SSH: "ssh -l ec2-user"
+      become: false

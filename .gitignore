@@ -25,6 +25,7 @@ docs/site/
 
 # Log folder
 log/
+logs/
 
 # MPI hosts file
 mpihosts.conf
