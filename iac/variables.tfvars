@@ -1,0 +1,9 @@
+region            = "eu-central-1"
+instance_type     = "t2.micro"
+image_id          = "ami-00060fac2f8c42d30"
+user              = "ec2-user"
+instance_count    = 2
+public_key        = "~/.ssh/id_rsa.pub"
+private_key       = "~/.ssh/id_rsa"
+access_key_id     = "YOUR-KEY-ID"
+secret_access_key = "YOUR-KEY"

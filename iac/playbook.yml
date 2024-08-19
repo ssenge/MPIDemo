@@ -1,0 +1,33 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: Install necessary dependencies
+      yum:
+        name:
+          - wget
+          - tar
+          - git
+        state: present
+
+    - name: Download Julia
+      get_url:
+        url: "https://julialang-s3.julialang.org/bin/linux/x64/1.10/julia-1.10.4-linux-x86_64.tar.gz"
+        dest: /tmp/julia.tar.gz
+
+    - name: Extract Julia
+      unarchive:
+        src: /tmp/julia.tar.gz
+        dest: /opt/
+        remote_src: yes
+
+    - name: Create symlink for Julia
+      file:
+        src: /opt/julia-1.10.4/bin/julia
+        dest: /usr/local/bin/julia
+        state: link
+
+    - name: Clone Git repo
+      git:
+        repo: 'https://github.com/ssenge/MPIDemo.git'
+        dest: /home/ec2-user/MPIDemo
